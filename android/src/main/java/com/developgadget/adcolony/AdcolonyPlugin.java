@@ -36,7 +36,7 @@ public class AdcolonyPlugin implements FlutterPlugin, MethodCallHandler, Activit
     private static MethodChannel Channel;
     @SuppressLint("StaticFieldLeak")
     static Activity ActivityInstance;
-    static AdColonyInterstitial Ad;
+    static ArrayList<AdColonyInterstitial> Ad = new ArrayList();
     private static final Listeners listeners = new Listeners();
 
     static AdcolonyPlugin getInstance() {
@@ -68,17 +68,28 @@ public class AdcolonyPlugin implements FlutterPlugin, MethodCallHandler, Activit
         AdcolonyPlugin.Channel.setMethodCallHandler(this);
     }
 
-    void OnMethodCallHandler(final String method) {
+    void OnMethodCallHandler(final String method , final String zoneId) {
         try {
+            final HashMap<String,String> args = new HashMap<>();
+            args.put("Id" , zoneId);
             AdcolonyPlugin.ActivityInstance.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Channel.invokeMethod(method, null);
+                    Channel.invokeMethod(method, args);
                 }
             });
         } catch (Exception e) {
             Log.e("AdColony", "Error " + e.toString());
         }
+    }
+
+    int getAdColonyInterestialIndex(String zoneId) {
+        for(int i = 0; i < AdcolonyPlugin.Ad.size() ; i++){
+            if(AdcolonyPlugin.Ad.get(i).getZoneID().equals(zoneId)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -90,11 +101,12 @@ public class AdcolonyPlugin implements FlutterPlugin, MethodCallHandler, Activit
                     this.InitSdk((HashMap) call.arguments);
                     break;
                 case "Request":
+                    int index = getAdColonyInterestialIndex((String) call.argument("Id"));
+                    if(index != -1) AdcolonyPlugin.Ad.remove(index);
                     AdColony.requestInterstitial((String) call.argument("Id"), AdcolonyPlugin.listeners);
                     break;
                 case "Show":
-                    if (AdcolonyPlugin.Ad != null)
-                        AdcolonyPlugin.Ad.show();
+                    AdcolonyPlugin.Ad.get(getAdColonyInterestialIndex((String) call.argument("Id"))).show();
                     break;
             }
             result.success(Boolean.TRUE);

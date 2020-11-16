@@ -64,7 +64,7 @@ public class Banner extends AdColonyAdViewListener implements PlatformView {
 
     public void onRequestNotFilled(AdColonyZone adColonyInterstitial) {
         try {
-            AdcolonyPlugin.getInstance().OnMethodCallHandler("onRequestNotFilled");
+            AdcolonyPlugin.getInstance().OnMethodCallHandler("onRequestNotFilled" , adColonyInterstitial.getZoneID());
             //AdColony.requestAdView(this.Id, this, this.Size);
             Log.e("AdColony", "onRequestNotFilled");
         } catch (Exception e) {

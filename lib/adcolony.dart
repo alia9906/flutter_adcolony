@@ -14,7 +14,7 @@ enum AdColonyAdListener {
   onClicked
 }
 
-typedef AdColonyListener(AdColonyAdListener listener);
+typedef AdColonyListener(AdColonyAdListener listener, String zoneId);
 
 class AdColony {
   static final MethodChannel channel = MethodChannel('AdColony');
@@ -40,25 +40,25 @@ class AdColony {
 
   static Future<void> request(String zone, AdColonyListener listener) async {
     try {
-      channel.setMethodCallHandler(
-          (MethodCall call) async => handleMethod(call, listener));
+      channel.setMethodCallHandler((MethodCall call) async =>
+          handleMethod(call, listener, call.arguments['Id']));
       await channel.invokeMethod('Request', {'Id': zone});
     } catch (e) {
       print(e.toString());
     }
   }
 
-  static Future<void> show() async {
+  static Future<void> show(String zone) async {
     try {
-      await channel.invokeMethod('Show');
+      await channel.invokeMethod('Show', {'Id': zone});
     } catch (e) {
       print(e.toString());
     }
   }
 
   static Future<void> handleMethod(
-      MethodCall call, AdColonyListener listener) async {
-    listener(adColonyAdListener[call.method]);
+      MethodCall call, AdColonyListener listener, String zoneId) async {
+    listener(adColonyAdListener[call.method], zoneId);
   }
 }
 

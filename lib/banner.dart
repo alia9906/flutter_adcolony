@@ -29,8 +29,8 @@ class BannerView extends StatelessWidget {
         creationParams: {'Size': this.sizes[this.size].type, 'Id': this.id},
         creationParamsCodec: StandardMessageCodec(),
         onPlatformViewCreated: (int i) {
-          AdColony.channel.setMethodCallHandler(
-              (MethodCall call) async => AdColony.handleMethod(call, listener));
+          AdColony.channel.setMethodCallHandler((MethodCall call) async =>
+              AdColony.handleMethod(call, listener, null));
         },
       ),
     );
