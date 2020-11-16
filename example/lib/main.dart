@@ -11,7 +11,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final zones = [
-    'vz4cc427f259db484398',
+    'vz943c1ab8c71b46c5a5',
     'vz943c1ab8c71b46c5a5',
     'vza5b6bdf6080b4a8682'
   ];
@@ -21,9 +21,9 @@ class _MyAppState extends State<MyApp> {
     AdColony.init(AdColonyOptions('app4f4659d279be4554ad', '0', this.zones));
   }
 
-  listener(AdColonyAdListener event) {
+  listener(AdColonyAdListener event, String zoneId) {
     print(event);
-    if (event == AdColonyAdListener.onRequestFilled) AdColony.show();
+    if (event == AdColonyAdListener.onRequestFilled) AdColony.show(zoneId);
   }
 
   @override
@@ -44,14 +44,22 @@ class _MyAppState extends State<MyApp> {
                 onPressed: () => AdColony.request(this.zones[0], listener),
                 child: Text('Show Interstitial Rewarded'),
               ),
-              BannerView((AdColonyAdListener event) => print(event),
-                  BannerSizes.banner, this.zones[2]),
-              BannerView((AdColonyAdListener event) => print(event),
-                  BannerSizes.medium, this.zones[2]),
-              BannerView((AdColonyAdListener event) => print(event),
-                  BannerSizes.skyscraper, this.zones[2]),
-              BannerView((AdColonyAdListener event) => print(event),
-                  BannerSizes.leaderboard, this.zones[2]),
+              BannerView(
+                  (AdColonyAdListener event, String zoneId) => print(event),
+                  BannerSizes.banner,
+                  this.zones[2]),
+              BannerView(
+                  (AdColonyAdListener event, String zoneId) => print(event),
+                  BannerSizes.medium,
+                  this.zones[2]),
+              BannerView(
+                  (AdColonyAdListener event, String zoneId) => print(event),
+                  BannerSizes.skyscraper,
+                  this.zones[2]),
+              BannerView(
+                  (AdColonyAdListener event, String zoneId) => print(event),
+                  BannerSizes.leaderboard,
+                  this.zones[2]),
             ],
           ),
         ),
