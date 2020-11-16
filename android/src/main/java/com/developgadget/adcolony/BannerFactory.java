@@ -18,6 +18,6 @@ public class BannerFactory extends PlatformViewFactory {
 
     @Override
     public PlatformView create(Context context, int viewId, Object args) {
-        return new Banner(context, this.messenger, viewId, (HashMap) args);
+        return new Banner( (HashMap) args);
     }
 }
